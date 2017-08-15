@@ -12,57 +12,42 @@
 	print_r ($continents);
 	echo '</pre>';
 
-	$two_word=[];
 	$first_part_name=[];
+	$first_part_name_rand=[];
 	$second_part_name=[];
-	$two_word_rand=[];
+	$array_count=[];
 
 	foreach ($continents as $continent => $animals) {
 		foreach ($animals as $animal) {
 			if (substr_count($animal, ' ') == 1)
 			{
 				$two_word []=$animal;
-				$first_part_name []=$continent . '&&&' . substr($animal, 0, strpos($animal, ' '));
+				$first_part_name [substr($animal, 0, strpos($animal, ' '))]=$continent;
 				$second_part_name[]=substr($animal, strpos($animal, ' ') + 1);
 			}
 		}
 	}
-  
-	shuffle($first_part_name);
+
 	shuffle($second_part_name);
 
 	while (count($first_part_name) > 0) {
-		$two_word_rand[]=array_shift($first_part_name) . ' ' . array_shift($second_part_name);
+		$key=array_rand($first_part_name);
+		$first_part_name_rand[$key . ' ' . array_shift($second_part_name)] = $first_part_name[$key];
+		unset($first_part_name[$key]);
 	}
 
-	sort($two_word_rand);
-	$region_old='';
-	$animals_str='';
-
-	foreach ($two_word_rand as $animal) {
-		
-		if (substr($animal, 0, strpos($animal, '&&&')) <> $region_old) {
-			
-			if ($animals_str<>'') {
-				echo '<p>' . $animals_str . '</p>';
-				$animals_str='';
-			}
-
-			echo '<h2>' . substr($animal, 0, strpos($animal, '&&&')) . '</h2>';
-		}
-
-		$animals_str.= (($animals_str=='') ? '' : ', ') . substr($animal, strpos($animal, '&&&')+3);
-		$region_old=substr($animal, 0, strpos($animal, '&&&'));
-	}
-
-	echo '<p>' . $animals_str . '</p>';
-	
-	
-	foreach ($two_word_rand as $key_animal => $animal) {
-		$two_word_rand[$key_animal]=substr($animal, strpos($animal, '&&&')+3);
-	}
-
+	asort($first_part_name_rand);
+  $array_count = array_count_values($first_part_name_rand);
+	$first_part_name_rand = array_keys($first_part_name_rand);
+	echo 'Основное задание: </br>';
 	echo '<pre>';
-	print_r ($two_word_rand);
+	print_r ($first_part_name_rand);
 	echo '</pre>';
+	echo '</br>Дополнительное задание: </br>';
+
+	foreach ($array_count as $region => $count) {
+		echo '<h2>' . $region . '</h2>';
+		echo '<p>' . implode(', ',array_slice($first_part_name_rand,0,$count)) . '</p>';
+		array_splice($first_part_name_rand,0,$count);
+	}
 ?>
