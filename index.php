@@ -12,6 +12,7 @@
 	print_r ($continents);
 	echo '</pre>';
 
+	$string_array=[];
 	$first_part_name=[];
 	$first_part_name_rand=[];
 	$second_part_name=[];
@@ -21,9 +22,9 @@
 		foreach ($animals as $animal) {
 			if (substr_count($animal, ' ') == 1)
 			{
-				$two_word []=$animal;
-				$first_part_name [substr($animal, 0, strpos($animal, ' '))]=$continent;
-				$second_part_name[]=substr($animal, strpos($animal, ' ') + 1);
+				$string_array=explode(' ', $animal);
+				$first_part_name [$string_array[0]]=$continent;
+				$second_part_name[]=$string_array[1];
 			}
 		}
 	}
